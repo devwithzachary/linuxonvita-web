@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://devwithzachary.github.io/linuxonvita-web/sitemap.xml
+Sitemap: https://linuxonvita.com/sitemap.xml
