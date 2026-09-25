@@ -5,7 +5,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   initGalleryShowcase();
-  initTerminalSimulator();
   initFaqAccordion();
   initMatrixFilter();
   initCopyButtons();
@@ -143,126 +142,7 @@ function initGalleryShowcase() {
   });
 }
 
-/* --------------------------------------------------------------------------
-   Terminal Simulator Playground
-   -------------------------------------------------------------------------- */
-function initTerminalSimulator() {
-  const terminalBody = document.getElementById('terminal-body');
-  const termTabs = document.querySelectorAll('.terminal-tab-btn');
 
-  const terminalOutputs = {
-    fastfetch: `<span class="term-comment"># Displaying system architecture and active kernel</span>
-<span class="term-prompt">vita:~# </span><span class="term-cmd">fastfetch</span>
-
-<span class="term-cyan">       _.-;;-._        </span><span class="term-cyan">root</span>@<span class="term-cyan">vita</span>
-<span class="term-cyan">'-..-'|   ||   |       </span>------------
-<span class="term-cyan">'-..-'|_.-;;-._|       </span><span class="term-white">OS: </span>Alpine Linux v3.20 (armv7l)
-<span class="term-cyan">'-..-'|   ||   |       </span><span class="term-white">Host: </span>Sony PlayStation Vita (PCH-1000/2000)
-<span class="term-cyan">'-..-'|_.-''-._|       </span><span class="term-white">Kernel: </span>Linux 6.12.0-vita-smp
-<span class="term-cyan">                       </span><span class="term-white">Uptime: </span>42 mins, 18 secs
-<span class="term-cyan">                       </span><span class="term-white">Shell: </span>ash
-<span class="term-cyan">                       </span><span class="term-white">Display: </span>960x544 @ 60Hz (simplefb)
-<span class="term-cyan">                       </span><span class="term-white">CPU: </span>ARM Cortex-A9 MPCore r2p2 (4 cores active SMP)
-<span class="term-cyan">                       </span><span class="term-white">Memory: </span>148MB / 498MB (RAM) + 256MB (ZRAM LZ4)
-<span class="term-cyan">                       </span><span class="term-white">Storage: </span>/mnt/ux0 (SD2Vita) 119.2G / 238.5G
-
-<span class="term-prompt">vita:~# </span><span class="term-cmd blink">_</span>`,
-
-    'vita-wifi': `<span class="term-comment"># Interactive wireless manager with live ASCII signal scanner</span>
-<span class="term-prompt">vita:~# </span><span class="term-cmd">vita-wifi</span>
-
-<span class="term-cyan">[vita-wifi] Scanning wireless networks on wlan0 (Marvell SD8787)...</span>
-<span class="term-white">+----+------------------------+----------+---------+----------+</span>
-<span class="term-white">| ID | SSID                   | SIGNAL   | BARS    | SECURITY |</span>
-<span class="term-white">+----+------------------------+----------+---------+----------+</span>
-<span class="term-green">|  1 | Studio_5G_HighSpeed    | -48 dBm  | [#####] | WPA2-PSK |</span>
-<span class="term-white">|  2 | Home_Network_2.4G      | -62 dBm  | [#### ] | WPA2-PSK |</span>
-<span class="term-white">|  3 | CoffeeShop_Guest       | -79 dBm  | [##   ] | OPEN     |</span>
-<span class="term-white">+----+------------------------+----------+---------+----------+</span>
-
-Select network ID to connect: <span class="term-yellow">1</span>
-Associating with 'Studio_5G_HighSpeed'...
-<span class="term-green">[OK] Authenticated via WPA2.</span>
-<span class="term-green">[OK] Assigned IP address: 192.168.1.145/24 (DHCP)</span>
-<span class="term-green">[OK] Gateway: 192.168.1.1 | DNS: 1.1.1.1</span>
-<span class="term-blue">[INFO] Configuration saved to /mnt/ux0/linux/wifi.conf</span>
-<span class="term-blue">[INFO] OpenSSH server reachable at ssh root@vita.local</span>
-
-<span class="term-prompt">vita:~# </span><span class="term-cmd blink">_</span>`,
-
-    'alpine-chroot': `<span class="term-comment"># Entering persistent Alpine Linux container & installing packages</span>
-<span class="term-prompt">vita:~# </span><span class="term-cmd">alpine-chroot</span>
-Entering Alpine Linux userland...
-Mounted /dev, /proc, /sys, /mnt/ux0
-
-<span class="term-prompt">alpine:/# </span><span class="term-cmd">apk add python3 py3-pip neovim htop</span>
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.20/main/armv7/APKINDEX.tar.gz
-fetch https://dl-cdn.alpinelinux.org/alpine/v3.20/community/armv7/APKINDEX.tar.gz
-(1/8) Installing libbz2 (1.0.8-r6)
-(2/8) Installing libffi (3.4.6-r0)
-(3/8) Installing python3 (3.12.3-r1)
-(4/8) Installing py3-pip (24.0-r2)
-(5/8) Installing libtermkey (0.22-r3)
-(6/8) Installing neovim (0.9.5-r0)
-(7/8) Installing htop (3.3.0-r0)
-Executing busybox-1.36.1-r29.trigger
-<span class="term-green">OK: 82 MiB in 24 packages</span>
-
-<span class="term-prompt">alpine:/# </span><span class="term-cmd">python3 -c "import os; print('Running Python on PS Vita ARM Cortex-A9! CPUs:', os.cpu_count())"</span>
-<span class="term-yellow">Running Python on PS Vita ARM Cortex-A9! CPUs: 4</span>
-
-<span class="term-prompt">alpine:/# </span><span class="term-cmd blink">_</span>`,
-
-    'vita-doom': `<span class="term-comment"># Native Framebuffer DOOM (fbdoom) with twin-stick gamepad mapping</span>
-<span class="term-prompt">vita:~# </span><span class="term-cmd">vita-doom</span>
-
-<span class="term-cyan">========================================</span>
-<span class="term-white">       LinuxOnVita fbdoom Launcher       </span>
-<span class="term-cyan">========================================</span>
-[fbdoom] Initializing direct Linux Framebuffer (/dev/fb0)...
-[fbdoom] Resolution: 960x544 32bpp, Pitch: 3840 bytes.
-[input] Capturing Syscon analog sticks (L/R) & Vita D-Pad via /dev/uinput...
-[input] Deadzone calibrated: 18% center deadband.
-[game] WAD file detected: /mnt/ux0/linux/doom1.wad (Shareware DOOM)
-[game] Launching DOOM Episode 1: Knee-Deep in the Dead...
-<span class="term-green">[fbdoom] Running at stable 35 FPS full native framebuffer.</span>
-<span class="term-comment">Press SELECT + START to exit to terminal shell.</span>
-
-<span class="term-prompt">vita:~# </span><span class="term-cmd blink">_</span>`,
-
-    'vita-swap': `<span class="term-comment"># Dynamic LZ4 ZRAM memory expansion</span>
-<span class="term-prompt">vita:~# </span><span class="term-cmd">vita-swap status</span>
-
-<span class="term-cyan">=== LinuxOnVita Memory & Swap Health ===</span>
-<span class="term-white">Physical RAM:</span>     512 MB (usable ~498 MB)
-<span class="term-white">ZRAM Swap Device:</span> /dev/zram0 (256 MB LZ4)
-<span class="term-white">ZRAM Comp Ratio:</span>  <span class="term-green">3.12x</span> (Compressed 78 MB into 25 MB RAM)
-<span class="term-white">SD Card Swapfile:</span> /mnt/ux0/swapfile (512 MB active)
-
-<span class="term-prompt">vita:~# </span><span class="term-cmd">free -h</span>
-               total        used        free      shared  buff/cache   available
-Mem:           498Mi       142Mi       230Mi       4.0Mi       126Mi       348Mi
-Swap:          768Mi        25Mi       743Mi
-
-<span class="term-green">[OK] Memory headroom verified: OOM-killer protection active.</span>
-
-<span class="term-prompt">vita:~# </span><span class="term-cmd blink">_</span>`
-  };
-
-  termTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.getAttribute('data-cmd');
-      if (!target || !terminalOutputs[target]) return;
-
-      termTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      if (terminalBody) {
-        terminalBody.innerHTML = terminalOutputs[target];
-      }
-    });
-  });
-}
 
 /* --------------------------------------------------------------------------
    Hardware Support Matrix Filters

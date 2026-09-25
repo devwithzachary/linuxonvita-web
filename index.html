@@ -122,15 +122,12 @@
       <a href="#hero" class="brand-link" aria-label="LinuxOnVita Home">
         <img src="assets/images/icon0.png" alt="LinuxOnVita Icon" class="brand-icon" width="38" height="38">
         <span class="brand-title">LinuxOnVita</span>
-        <span class="brand-badge">Linux 6.12</span>
       </a>
 
       <nav aria-label="Main Navigation">
         <ul class="nav-menu" id="nav-menu">
           <li><a href="#features" class="nav-link">Features</a></li>
-          <li><a href="#showcase" class="nav-link">Screenshots</a></li>
-          <li><a href="#terminal" class="nav-link">Live Terminal</a></li>
-          <li><a href="#hardware" class="nav-link">Hardware Matrix</a></li>
+          <li><a href="#hardware" class="nav-link">Hardware Support</a></li>
           <li><a href="#installation" class="nav-link">Quick Start</a></li>
           <li><a href="#alpine" class="nav-link">Alpine Packages</a></li>
           <li><a href="#faq" class="nav-link">FAQ</a></li>
@@ -435,57 +432,11 @@
       </div>
     </section>
 
-    <!-- Interactive Live Terminal Playground -->
-    <section id="terminal" class="terminal-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Interactive Terminal</span>
-          <h2 class="section-title">Explore the LinuxOnVita Console</h2>
-          <p class="section-desc">
-            Click any command tab below to simulate the real interactive command-line experience running on PS Vita hardware.
-          </p>
-        </div>
-
-        <div class="terminal-window">
-          <div class="terminal-header">
-            <div class="terminal-controls">
-              <span class="terminal-dot dot-red"></span>
-              <span class="terminal-dot dot-yellow"></span>
-              <span class="terminal-dot dot-green"></span>
-            </div>
-            <div class="terminal-tab-list" role="tablist">
-              <button class="terminal-tab-btn active" data-cmd="fastfetch" role="tab">fastfetch</button>
-              <button class="terminal-tab-btn" data-cmd="vita-wifi" role="tab">vita-wifi</button>
-              <button class="terminal-tab-btn" data-cmd="alpine-chroot" role="tab">alpine-chroot</button>
-              <button class="terminal-tab-btn" data-cmd="vita-doom" role="tab">vita-doom</button>
-              <button class="terminal-tab-btn" data-cmd="vita-swap" role="tab">vita-swap</button>
-            </div>
-          </div>
-          <pre class="terminal-body" id="terminal-body"><span class="term-comment"># Displaying system architecture and active kernel</span>
-<span class="term-prompt">vita:~# </span><span class="term-cmd">fastfetch</span>
-
-<span class="term-cyan">       _.-;;-._        </span><span class="term-cyan">root</span>@<span class="term-cyan">vita</span>
-<span class="term-cyan">'-..-'|   ||   |       </span>------------
-<span class="term-cyan">'-..-'|_.-;;-._|       </span><span class="term-white">OS: </span>Alpine Linux v3.20 (armv7l)
-<span class="term-cyan">'-..-'|   ||   |       </span><span class="term-white">Host: </span>Sony PlayStation Vita (PCH-1000/2000)
-<span class="term-cyan">'-..-'|_.-''-._|       </span><span class="term-white">Kernel: </span>Linux 6.12.0-vita-smp
-<span class="term-cyan">                       </span><span class="term-white">Uptime: </span>42 mins, 18 secs
-<span class="term-cyan">                       </span><span class="term-white">Shell: </span>ash
-<span class="term-cyan">                       </span><span class="term-white">Display: </span>960x544 @ 60Hz (simplefb)
-<span class="term-cyan">                       </span><span class="term-white">CPU: </span>ARM Cortex-A9 MPCore r2p2 (4 cores active SMP)
-<span class="term-cyan">                       </span><span class="term-white">Memory: </span>148MB / 498MB (RAM) + 256MB (ZRAM LZ4)
-<span class="term-cyan">                       </span><span class="term-white">Storage: </span>/mnt/ux0 (SD2Vita) 119.2G / 238.5G
-
-<span class="term-prompt">vita:~# </span><span class="term-cmd blink">_</span></pre>
-        </div>
-      </div>
-    </section>
-
-    <!-- Hardware Support Matrix -->
+    <!-- Hardware Support -->
     <section id="hardware" class="hardware-section">
       <div class="container">
         <div class="section-header">
-          <span class="section-tag">Hardware Matrix</span>
+          <span class="section-tag">Hardware Support</span>
           <h2 class="section-title">PS Vita Hardware Support &amp; Drivers</h2>
           <p class="section-desc">
             Detailed hardware compatibility status for Sony PlayStation Vita (PCH-1000 OLED, PCH-2000 LCD, and PS TV).
@@ -586,7 +537,8 @@
           </p>
         </div>
 
-        <div class="notice-box">
+        <!-- Sony Memory Card Requirement Warning -->
+        <div class="notice-box warning-card">
           <div class="notice-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
@@ -595,9 +547,29 @@
             </svg>
           </div>
           <div class="notice-content">
-            <h4>Critical Prerequisite: Enable Unsafe Homebrew</h4>
+            <h4>Strict Requirement: Official Sony Memory Card Required</h4>
             <p>
-              Before launching, open <strong>Settings &rarr; HENkaku Settings &rarr; check Enable Unsafe Homebrew [✓]</strong>. If disabled, the loader plugin will exit with error <code>0x8002D003</code>. An official physical Sony memory card is strictly required on all consoles to host the baremetal bootloader.
+              An official physical <strong>Sony PS Vita Memory Card</strong> is strictly required on <strong>all hardware models</strong> (PS Vita 1000 OLED, 2000 Slim, and PlayStation TV).
+              The low-level baremetal bootloader operates before Linux storage drivers are loaded and interfaces directly with Sony's proprietary Memory Stick interface (MSIF). It <strong>cannot</strong> boot from internal eMMC storage (<code>imc0:</code>) or SD2Vita adapters.
+              <br><br>
+              <em>SD2Vita Users:</em> Your official Sony card will appear as <code>xmc0:</code> or <code>uma0:</code> in the installer. Boot files are installed to the Sony card, while your high-capacity microSD card remains fully accessible in Linux at <code>/mnt/ux0</code>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Unsafe Homebrew Prerequisite -->
+        <div class="notice-box">
+          <div class="notice-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="notice-content">
+            <h4>Software Prerequisite: Enable Unsafe Homebrew</h4>
+            <p>
+              Before launching, open <strong>Settings &rarr; HENkaku Settings &rarr; check Enable Unsafe Homebrew [✓]</strong>. If disabled, the loader plugin will exit with error <code>0x8002D003</code>.
             </p>
           </div>
         </div>
@@ -663,35 +635,53 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
                 Python Web Services
               </h3>
-              <p class="eco-desc">Spin up microservices, local REST APIs, and HTTP file servers accessible across your local Wi-Fi.</p>
-              <code class="eco-code">apk add python3 &amp;&amp; python3 -m http.server 8080</code>
+              <p class="eco-desc">Spin up microservices, local REST APIs, and pocket Wi-Fi file servers accessible across your local network.</p>
+              <code class="eco-code">apk add python3 py3-pip &amp;&amp; python3 -m http.server 8080</code>
             </div>
 
             <div class="eco-card">
               <h3 class="eco-title">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                Native C/C++ Development
+                Native C/C++ Compilation
               </h3>
-              <p class="eco-desc">Compile native programs directly on the 4-core Cortex-A9 CPU with GCC, Clang, and Make.</p>
+              <p class="eco-desc">Compile real C and C++ programs directly on the 4-core ARM Cortex-A9 CPU without needing desktop cross-compilers.</p>
               <code class="eco-code">apk add gcc g++ make musl-dev git</code>
             </div>
 
             <div class="eco-card">
               <h3 class="eco-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                Terminal Productivity
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Network Diagnostics &amp; Audit
               </h3>
-              <p class="eco-desc">Work comfortably with modern text editors and multi-window terminal multiplexers.</p>
-              <code class="eco-code">apk add neovim tmux htop curl</code>
+              <p class="eco-desc">Turn your PS Vita into a portable pocket network auditor, API inspector, device scanner, and connectivity toolkit.</p>
+              <code class="eco-code">apk add nmap curl wget jq bind-tools net-tools</code>
             </div>
 
             <div class="eco-card">
               <h3 class="eco-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                Remote SSH Terminal
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                System Telemetry &amp; Monitor
               </h3>
-              <p class="eco-desc">SSH directly into your PS Vita from your MacBook, PC, or iPad using mDNS zero-config.</p>
-              <code class="eco-code">ssh root@vita.local</code>
+              <p class="eco-desc">Monitor CPU frequencies across all 4 SMP cores, process activity, memory pressures, and storage usage in real time.</p>
+              <code class="eco-code">apk add fastfetch htop btop ncdu</code>
+            </div>
+
+            <div class="eco-card">
+              <h3 class="eco-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Text Editing &amp; Notes
+              </h3>
+              <p class="eco-desc">Edit code, write notes, and configure scripts comfortably with touch-friendly editors and split-pane multiplexers.</p>
+              <code class="eco-code">apk add micro nano vim tmux</code>
+            </div>
+
+            <div class="eco-card">
+              <h3 class="eco-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                Console Web Browsing &amp; Docs
+              </h3>
+              <p class="eco-desc">Browse Wikipedia, read developer documentation, and inspect web endpoints directly on the console display over Wi-Fi.</p>
+              <code class="eco-code">apk add links w3m</code>
             </div>
           </div>
         </div>
@@ -837,9 +827,9 @@
           <h4>Navigation</h4>
           <ul class="footer-links">
             <li><a href="#features">Core Features</a></li>
-            <li><a href="#showcase">Console Screenshots</a></li>
             <li><a href="#hardware">Hardware Support</a></li>
             <li><a href="#installation">Installation Steps</a></li>
+            <li><a href="#alpine">Alpine Packages</a></li>
             <li><a href="#faq">Frequently Asked Questions</a></li>
           </ul>
         </div>
