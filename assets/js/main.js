@@ -112,32 +112,38 @@ function initGalleryShowcase() {
   });
 
   // Lightbox handlers
-  function openLightbox() {
+  function openLightbox(triggerType = 'zoom_button') {
     if (!lightboxModal || !lightboxImg || !displayImg) return;
     lightboxImg.src = displayImg.src;
     lightboxImg.alt = displayImg.alt;
     lightboxModal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (triggerType === 'image_click') {
+      trackUmamiEvent('Gallery Zoom', { trigger: 'image_click' });
+    }
   }
 
-  function closeLightbox() {
+  function closeLightbox(method = 'button') {
     if (!lightboxModal) return;
     lightboxModal.classList.remove('active');
     document.body.style.overflow = '';
+    if (method !== 'button') {
+      trackUmamiEvent('Lightbox Close', { method });
+    }
   }
 
-  if (zoomBtn) zoomBtn.addEventListener('click', openLightbox);
-  if (displayImg) displayImg.addEventListener('click', openLightbox);
-  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (zoomBtn) zoomBtn.addEventListener('click', () => openLightbox('zoom_button'));
+  if (displayImg) displayImg.addEventListener('click', () => openLightbox('image_click'));
+  if (lightboxClose) lightboxClose.addEventListener('click', () => closeLightbox('button'));
   if (lightboxModal) {
     lightboxModal.addEventListener('click', (e) => {
-      if (e.target === lightboxModal) closeLightbox();
+      if (e.target === lightboxModal) closeLightbox('backdrop');
     });
   }
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && lightboxModal && lightboxModal.classList.contains('active')) {
-      closeLightbox();
+      closeLightbox('escape_key');
     }
   });
 }
@@ -232,3 +238,22 @@ function initCopyButtons() {
     });
   });
 }
+
+/* --------------------------------------------------------------------------
+   Umami Event Tracking Helper
+   -------------------------------------------------------------------------- */
+export function trackUmamiEvent(eventName, eventData = {}) {
+  try {
+    if (typeof window !== 'undefined' && window.umami && typeof window.umami.track === 'function') {
+      window.umami.track(eventName, eventData);
+    }
+  } catch (err) {
+    // Fail silently to prevent any disruption if ad-blockers or network errors occur
+  }
+}
+
+// Attach to window for global access
+if (typeof window !== 'undefined') {
+  window.trackUmamiEvent = trackUmamiEvent;
+}
+
