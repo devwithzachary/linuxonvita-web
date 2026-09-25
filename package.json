@@ -1,0 +1,27 @@
+{
+  "name": "linuxonvita-web",
+  "version": "1.0.0",
+  "description": "Official website and SEO landing portal for the LinuxOnVita project",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "npx serve ."
+  },
+  "keywords": [
+    "psvita",
+    "linux",
+    "playstation-vita",
+    "linuxonvita",
+    "handheld-linux",
+    "armv7",
+    "cortex-a9",
+    "alpine-linux",
+    "homebrew"
+  ],
+  "author": "Zachary Powell (devwithzachary)",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>LinuxOnVita — Standalone Modern Linux 6.12 Distribution for PlayStation Vita</title>
+  <meta name="title" content="LinuxOnVita — Standalone Modern Linux 6.12 Distribution for PlayStation Vita">
+  <meta name="description" content="Turn your Sony PlayStation Vita into a standalone handheld Linux device. Powered by modern Linux 6.12 SMP with virtual touch typing, physical gamepad navigation, automated on-device Wi-Fi, ZRAM swap, and full Alpine Linux package management.">
+  <meta name="keywords" content="Linux on PS Vita, PlayStation Vita Linux, LinuxOnVita, PS Vita Homebrew, ARM Cortex-A9, Alpine Linux Vita, Handheld Linux, fbdoom PS Vita, HENkaku Linux, PS Vita 6.12 Kernel">
+  <meta name="author" content="Zachary Powell (devwithzachary)">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://devwithzachary.github.io/linuxonvita-web/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devwithzachary.github.io/linuxonvita-web/">
+  <meta property="og:site_name" content="LinuxOnVita">
+  <meta property="og:title" content="LinuxOnVita — Standalone Modern Linux 6.12 Distribution for PlayStation Vita">
+  <meta property="og:description" content="Experience native modern Linux 6.12 on your PS Vita without serial cables. On-screen touch typing, gamepad navigation, automated on-device Wi-Fi, and Alpine Linux packages.">
+  <meta property="og:image" content="https://devwithzachary.github.io/linuxonvita-web/assets/images/screenshot.png">
+  <meta property="og:image:width" content="960">
+  <meta property="og:image:height" content="544">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://devwithzachary.github.io/linuxonvita-web/">
+  <meta name="twitter:title" content="LinuxOnVita — Handheld Linux 6.12 for PlayStation Vita">
+  <meta name="twitter:description" content="A complete handheld distribution bringing modern Linux 6.12, touch typing, physical gamepad navigation, and Alpine Linux to the Sony PS Vita.">
+  <meta name="twitter:image" content="https://devwithzachary.github.io/linuxonvita-web/assets/images/screenshot.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/icon0.png">
+  <link rel="apple-touch-icon" href="assets/images/icon0.png">
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Structured Data (JSON-LD) for Rich Google Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "LinuxOnVita",
+        "operatingSystem": "PlayStation Vita (HENkaku / Ensō 3.60, 3.65), Linux 6.12",
+        "applicationCategory": "OperatingSystem",
+        "description": "A complete distribution, automated build environment, and handheld userland for running Linux 6.12 on hacked PlayStation Vita consoles.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Zachary Powell",
+          "url": "https://github.com/devwithzachary"
+        },
+        "url": "https://github.com/devwithzachary/LinuxOnVita",
+        "downloadUrl": "https://github.com/devwithzachary/LinuxOnVita/releases",
+        "license": "https://www.gnu.org/licenses/gpl-3.0.html"
+      },
+      {
+        "@type": "WebSite",
+        "name": "LinuxOnVita",
+        "url": "https://devwithzachary.github.io/linuxonvita-web/",
+        "description": "Official portal and documentation for the LinuxOnVita project."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Will installing LinuxOnVita delete my existing PS Vita games or firmware?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No! LinuxOnVita is completely non-destructive. It installs as a standard LiveArea homebrew VPK application. Your official Sony firmware, games, saves, and plugins remain entirely intact. When you reboot your console, you return straight to your regular PS Vita home screen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is an official Sony Memory Card strictly required?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The low-level baremetal bootloader interfaces directly with Sony's proprietary memory card hardware (MSIF). Because the baremetal loader operates before Linux kernel storage drivers are active, it cannot load initial kernel binaries from internal eMMC (imc0:) or SD2Vita game-card adapters. Once Linux boots, SD2Vita cards and internal storage are fully accessible."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use my SD2Vita storage with LinuxOnVita?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! SD2Vita adapters are automatically powered via Syscon and mounted at /mnt/ux0. You can use your high-capacity microSD card to store your Alpine Linux rootfs, persistent applications, swap files, and Doom WADs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What hardware models of the PlayStation Vita are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "LinuxOnVita supports the original PS Vita 1000 (OLED), PS Vita 2000 (LCD Slim), and PlayStation TV running firmware 3.60 or 3.65 with HENkaku / Ensō. It includes calibrated Device Tree blobs for both OLED and LCD screen hardware."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-link" aria-label="LinuxOnVita Home">
+        <img src="assets/images/icon0.png" alt="LinuxOnVita Icon" class="brand-icon" width="38" height="38">
+        <span class="brand-title">LinuxOnVita</span>
+        <span class="brand-badge">Linux 6.12</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#showcase" class="nav-link">Screenshots</a></li>
+          <li><a href="#terminal" class="nav-link">Live Terminal</a></li>
+          <li><a href="#hardware" class="nav-link">Hardware Matrix</a></li>
+          <li><a href="#installation" class="nav-link">Quick Start</a></li>
+          <li><a href="#alpine" class="nav-link">Alpine Packages</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://github.com/devwithzachary/LinuxOnVita" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline btn-github-stars" title="View Source and Star on GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>Star Repo</span>
+        </a>
+        <a href="https://github.com/devwithzachary/LinuxOnVita/releases" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary" title="Download LinuxOnVita VPK">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download .VPK</span>
+        </a>
+        <button class="mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+      <div class="container">
+        <div class="hero-pill-wrapper">
+          <div class="hero-pill">
+            <span class="dot"></span>
+            <span>Kernel 6.12.0-vita • 4-Core ARM Cortex-A9 • Standalone Handheld</span>
+          </div>
+        </div>
+
+        <h1 class="hero-title">
+          Transform Your PlayStation Vita Into A <span class="hero-gradient-text">Full Linux Handheld</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Experience native modern Linux 6.12 on your PS Vita without serial cables or tethered PCs.
+          Featuring virtual touch typing, physical gamepad navigation, automated on-device Wi-Fi, 
+          compressed ZRAM swap, and full Alpine Linux package management.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="https://github.com/devwithzachary/LinuxOnVita/releases" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Get LinuxOnVita (.VPK)</span>
+          </a>
+          <a href="https://github.com/devwithzachary/LinuxOnVita" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>View GitHub Repository</span>
+          </a>
+          <a href="#installation" class="btn btn-lg btn-ghost">
+            <span>Quick Start Guide &rarr;</span>
+          </a>
+        </div>
+
+        <!-- Key Metrics Ribbon -->
+        <div class="stats-ribbon">
+          <div class="stat-card">
+            <div class="stat-value cyan">~12s</div>
+            <div class="stat-label">Fast Boot to Shell</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value emerald">4 Cores</div>
+            <div class="stat-label">SMP Multiprocessing</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value blue">960×544</div>
+            <div class="stat-label">100% Brightness Framebuffer</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value purple">GPL-3.0</div>
+            <div class="stat-label">100% Free & Open Source</div>
+          </div>
+        </div>
+
+        <!-- Interactive Handheld Console Showcase (4 Real Screenshots) -->
+        <div class="showcase-wrapper" id="showcase">
+          <div class="console-mockup">
+            <div class="console-topbar">
+              <div class="console-title-group">
+                <span class="console-status-dot"></span>
+                <span class="console-title">PlayStation Vita • <code>/dev/fb0</code> (960×544 32bpp)</span>
+              </div>
+              <div class="console-meta">Linux 6.12.0-vita</div>
+            </div>
+
+            <div class="screen-container">
+              <!-- LCP Image: fetchpriority high, explicit dimensions, no lazy loading -->
+              <img 
+                src="assets/images/screenshot.png" 
+                alt="Interactive Welcome Screen & On-Screen Touch Keyboard" 
+                id="screen-display-img" 
+                class="screen-display-img"
+                width="960" 
+                height="544" 
+                fetchpriority="high"
+              >
+              
+              <div class="screen-caption-overlay">
+                <div>
+                  <h3 class="caption-title" id="caption-title">Interactive Welcome Screen &amp; On-Screen Touch Keyboard</h3>
+                  <p class="caption-desc" id="caption-desc">Native virtual touch keyboard (fbkeyboard) with dual ABC and ?123 symbol layers for instant standalone typing without cables or external peripherals.</p>
+                </div>
+                <button class="screen-zoom-btn" id="screen-zoom-btn" aria-label="Open Fullscreen View">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                  <span>Zoom</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Screenshot Switcher Tabs -->
+            <div class="gallery-nav-tabs" role="tablist" aria-label="Screenshot Gallery">
+              <button class="gallery-tab-btn active" role="tab" aria-selected="true" data-index="0">
+                <span class="tab-badge">01 // TOUCH INPUT</span>
+                <span class="tab-title">Virtual Touch Keyboard</span>
+              </button>
+              <button class="gallery-tab-btn" role="tab" aria-selected="false" data-index="1">
+                <span class="tab-badge">02 // NATIVE GAMING</span>
+                <span class="tab-title">Framebuffer DOOM</span>
+              </button>
+              <button class="gallery-tab-btn" role="tab" aria-selected="false" data-index="2">
+                <span class="tab-badge">03 // ECOSYSTEM</span>
+                <span class="tab-title">Alpine Linux &amp; Fastfetch</span>
+              </button>
+              <button class="gallery-tab-btn" role="tab" aria-selected="false" data-index="3">
+                <span class="tab-badge">04 // CONNECTIVITY</span>
+                <span class="tab-title">On-Device Wi-Fi (vita-wifi)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Why LinuxOnVita & Core Features Grid -->
+    <section id="features" class="breakthrough-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Breakthrough Engineering</span>
+          <h2 class="section-title">From Tethered Proof-of-Concept to True Handheld Freedom</h2>
+          <p class="section-desc">
+            Early PS Vita Linux efforts proved the SoC could boot, but left users stranded with soldered UART serial wires and dead terminals. LinuxOnVita delivers a complete, consumer-ready handheld distribution.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <line x1="6" y1="8" x2="6" y2="8"></line>
+                  <line x1="10" y1="8" x2="10" y2="8"></line>
+                  <line x1="14" y1="8" x2="14" y2="8"></line>
+                  <line x1="18" y1="8" x2="18" y2="8"></line>
+                  <line x1="6" y1="12" x2="18" y2="12"></line>
+                </svg>
+              </div>
+              <span class="feature-tag">fbkeyboard</span>
+            </div>
+            <h3 class="feature-title">Touchscreen Virtual Keyboard</h3>
+            <p class="feature-desc">
+              Direct framebuffer on-screen typing with multi-touch digitizer integration. Dual ABC / ?123 symbol layouts, special function keys, and an instant hide toggle give you complete standalone terminal control.
+            </p>
+            <div class="feature-command">
+              <code>fbkeyboard &amp;</code>
+              <button class="btn btn-sm copy-btn" data-copy="fbkeyboard &" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                </svg>
+              </div>
+              <span class="feature-tag">vita-input-mapper</span>
+            </div>
+            <h3 class="feature-title">Physical Gamepad Navigation</h3>
+            <p class="feature-desc">
+              Navigate the Linux shell using the Vita's physical D-Pad, face buttons, and shoulder triggers. Fixed active-low button masks and Syscon 0x180 analog stick sampling with calibrated deadbands via <code>/dev/uinput</code>.
+            </p>
+            <div class="feature-command">
+              <code>vita-input-mapper &amp;</code>
+              <button class="btn btn-sm copy-btn" data-copy="vita-input-mapper &" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+              </div>
+              <span class="feature-tag">vita-wifi</span>
+            </div>
+            <h3 class="feature-title">Interactive On-Device Wi-Fi</h3>
+            <p class="feature-desc">
+              Scan, select, and connect to Wi-Fi networks directly on the console with an interactive ASCII signal table. WPA2 credentials persist automatically to <code>/mnt/ux0/linux/wifi.conf</code> without needing a PC.
+            </p>
+            <div class="feature-command">
+              <code>vita-wifi</code>
+              <button class="btn btn-sm copy-btn" data-copy="vita-wifi" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+              </div>
+              <span class="feature-tag">alpine-chroot</span>
+            </div>
+            <h3 class="feature-title">Alpine Linux Package Ecosystem</h3>
+            <p class="feature-desc">
+              Run thousands of standard ARMv7 packages inside a persistent Alpine Linux chroot. Use <code>apk add</code> to install Python 3, GCC, Git, Neovim, Tmux, Node.js, and CLI utilities with zero container overhead.
+            </p>
+            <div class="feature-command">
+              <code>alpine-chroot</code>
+              <button class="btn btn-sm copy-btn" data-copy="alpine-chroot" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                </svg>
+              </div>
+              <span class="feature-tag">vita-swap</span>
+            </div>
+            <h3 class="feature-title">ZRAM Compression &amp; Memory Safety</h3>
+            <p class="feature-desc">
+              Zero-latency LZ4 compressed RAM swap expands usable memory from 512MB to ~768MB–1GB. Prevents Out-Of-Memory (OOM) crashes during package compilation, heavy Python tasks, or running memory-intensive scripts.
+            </p>
+            <div class="feature-command">
+              <code>vita-swap status</code>
+              <button class="btn btn-sm copy-btn" data-copy="vita-swap status" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line>
+                  <line x1="21" y1="12" x2="23" y2="12"></line>
+                </svg>
+              </div>
+              <span class="feature-tag">vita-brightness</span>
+            </div>
+            <h3 class="feature-title">Full 100% Display Brightness</h3>
+            <p class="feature-desc">
+              Patched baremetal bootloaders boot both OLED (Vita 1000) and LCD (Vita 2000) panels at full 100% brightness. PS Vita 2000 Slim users enjoy runtime PWM dimming control across I2C bus 1 with <code>vita-brightness</code>.
+            </p>
+            <div class="feature-command">
+              <code>vita-brightness set 80</code>
+              <button class="btn btn-sm copy-btn" data-copy="vita-brightness set 80" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Live Terminal Playground -->
+    <section id="terminal" class="terminal-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Interactive Terminal</span>
+          <h2 class="section-title">Explore the LinuxOnVita Console</h2>
+          <p class="section-desc">
+            Click any command tab below to simulate the real interactive command-line experience running on PS Vita hardware.
+          </p>
+        </div>
+
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-controls">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-yellow"></span>
+              <span class="terminal-dot dot-green"></span>
+            </div>
+            <div class="terminal-tab-list" role="tablist">
+              <button class="terminal-tab-btn active" data-cmd="fastfetch" role="tab">fastfetch</button>
+              <button class="terminal-tab-btn" data-cmd="vita-wifi" role="tab">vita-wifi</button>
+              <button class="terminal-tab-btn" data-cmd="alpine-chroot" role="tab">alpine-chroot</button>
+              <button class="terminal-tab-btn" data-cmd="vita-doom" role="tab">vita-doom</button>
+              <button class="terminal-tab-btn" data-cmd="vita-swap" role="tab">vita-swap</button>
+            </div>
+          </div>
+          <pre class="terminal-body" id="terminal-body"><span class="term-comment"># Displaying system architecture and active kernel</span>
+<span class="term-prompt">vita:~# </span><span class="term-cmd">fastfetch</span>
+
+<span class="term-cyan">       _.-;;-._        </span><span class="term-cyan">root</span>@<span class="term-cyan">vita</span>
+<span class="term-cyan">'-..-'|   ||   |       </span>------------
+<span class="term-cyan">'-..-'|_.-;;-._|       </span><span class="term-white">OS: </span>Alpine Linux v3.20 (armv7l)
+<span class="term-cyan">'-..-'|   ||   |       </span><span class="term-white">Host: </span>Sony PlayStation Vita (PCH-1000/2000)
+<span class="term-cyan">'-..-'|_.-''-._|       </span><span class="term-white">Kernel: </span>Linux 6.12.0-vita-smp
+<span class="term-cyan">                       </span><span class="term-white">Uptime: </span>42 mins, 18 secs
+<span class="term-cyan">                       </span><span class="term-white">Shell: </span>ash
+<span class="term-cyan">                       </span><span class="term-white">Display: </span>960x544 @ 60Hz (simplefb)
+<span class="term-cyan">                       </span><span class="term-white">CPU: </span>ARM Cortex-A9 MPCore r2p2 (4 cores active SMP)
+<span class="term-cyan">                       </span><span class="term-white">Memory: </span>148MB / 498MB (RAM) + 256MB (ZRAM LZ4)
+<span class="term-cyan">                       </span><span class="term-white">Storage: </span>/mnt/ux0 (SD2Vita) 119.2G / 238.5G
+
+<span class="term-prompt">vita:~# </span><span class="term-cmd blink">_</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware Support Matrix -->
+    <section id="hardware" class="hardware-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Hardware Matrix</span>
+          <h2 class="section-title">PS Vita Hardware Support &amp; Drivers</h2>
+          <p class="section-desc">
+            Detailed hardware compatibility status for Sony PlayStation Vita (PCH-1000 OLED, PCH-2000 LCD, and PS TV).
+          </p>
+        </div>
+
+        <div class="matrix-container">
+          <div style="overflow-x: auto;">
+            <table class="matrix-table">
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Status</th>
+                  <th>Implementation Details &amp; Driver Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="matrix-row" data-category="system">
+                  <td><strong>CPU (SMP Multiprocessing)</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>Quad-core ARM Cortex-A9 MPCore with active Symmetric Multi-Processing (SMP) across all 4 cores.</td>
+                </tr>
+                <tr class="matrix-row" data-category="display">
+                  <td><strong>Display (OLED / LCD Framebuffer)</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>Native 960×544 framebuffer initialized at full 100% brightness (Level 15 Gamma on OLED; PWM backlight on LCD).</td>
+                </tr>
+                <tr class="matrix-row" data-category="display">
+                  <td><strong>Backlight Control (PS Vita 2000)</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working (LCD)</span></td>
+                  <td>Dynamic runtime PWM duty control via I2C bus 1 controlled by <code>vita-brightness</code>.</td>
+                </tr>
+                <tr class="matrix-row" data-category="network">
+                  <td><strong>Wi-Fi (Marvell SD8787)</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td><code>mwifiex_sdio</code> on SDIF2 with custom Ernie power sequencing and on-device <code>vita-wifi</code> manager.</td>
+                </tr>
+                <tr class="matrix-row" data-category="input">
+                  <td><strong>Touchscreen Digitizer</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>Multi-touch digitizer mapped via <code>evdev</code>; drives on-screen typing in <code>fbkeyboard</code>.</td>
+                </tr>
+                <tr class="matrix-row" data-category="input">
+                  <td><strong>Gamepad Buttons &amp; D-Pad</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>Patched <code>vita-buttons</code> driver with uniform active-low mask and <code>/dev/uinput</code> shell mapping.</td>
+                </tr>
+                <tr class="matrix-row" data-category="input">
+                  <td><strong>Analog Twin-Sticks</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>Syscon <code>0x180</code> analog sampling enabled with deadzone filtering for smooth gamepad controls.</td>
+                </tr>
+                <tr class="matrix-row" data-category="storage">
+                  <td><strong>SD2Vita Storage (<code>ux0:</code>)</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>Powered via Syscon <code>0x888</code>, auto-mounted at <code>/mnt/ux0</code> (<code>/dev/mmcblk1p1</code>). High-capacity microSD ready.</td>
+                </tr>
+                <tr class="matrix-row" data-category="storage">
+                  <td><strong>Internal Storage (eMMC / <code>ur0:</code>)</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>Auto-detected SCE partitions (<code>/dev/mmcblk0p1</code>–<code>p12</code>), internal system partition mounted at <code>/mnt/ur0</code>.</td>
+                </tr>
+                <tr class="matrix-row" data-category="storage">
+                  <td><strong>ZRAM Memory Expansion</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td>256MB compressed LZ4 RAM swap pool managed automatically by <code>vita-swap</code>.</td>
+                </tr>
+                <tr class="matrix-row" data-category="storage">
+                  <td><strong>Official Sony Memory Card</strong></td>
+                  <td><span class="status-badge partial"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> Bootloader Only</span></td>
+                  <td>Boot binaries read by baremetal MSIF loader; runtime Linux MSIF storage driver not yet implemented.</td>
+                </tr>
+                <tr class="matrix-row" data-category="wip">
+                  <td><strong>3D GPU Acceleration</strong></td>
+                  <td><span class="status-badge unsupported">Software Render</span></td>
+                  <td>PowerVR SGX543MP4+ lacks open-source Linux kernel drivers. Full-speed 2D simplefb software rendering.</td>
+                </tr>
+                <tr class="matrix-row" data-category="wip">
+                  <td><strong>Audio Codec</strong></td>
+                  <td><span class="status-badge unsupported">In Progress</span></td>
+                  <td>Proprietary Vita audio DAC currently lacks an active Linux ALSA driver.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Installation Guide -->
+    <section id="installation" class="install-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Getting Started</span>
+          <h2 class="section-title">Quick Installation &amp; First Boot</h2>
+          <p class="section-desc">
+            LinuxOnVita is packaged as an all-in-one <code>LinuxOnVita.vpk</code> for HENkaku / Ensō consoles.
+          </p>
+        </div>
+
+        <div class="notice-box">
+          <div class="notice-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="notice-content">
+            <h4>Critical Prerequisite: Enable Unsafe Homebrew</h4>
+            <p>
+              Before launching, open <strong>Settings &rarr; HENkaku Settings &rarr; check Enable Unsafe Homebrew [✓]</strong>. If disabled, the loader plugin will exit with error <code>0x8002D003</code>. An official physical Sony memory card is strictly required on all consoles to host the baremetal bootloader.
+            </p>
+          </div>
+        </div>
+
+        <div class="install-steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Download VPK</h3>
+            <p class="step-text">
+              Grab <strong><code>LinuxOnVita.vpk</code></strong> from the official GitHub Releases page. This single package contains the kernel, bootloaders, device trees, and rootfs.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Transfer via VitaShell</h3>
+            <p class="step-text">
+              Connect your PS Vita to your PC using USB or FTP in VitaShell. Copy <code>LinuxOnVita.vpk</code> to your memory card root (e.g. <code>ux0:LinuxOnVita.vpk</code>).
+            </p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Install Package</h3>
+            <p class="step-text">
+              In VitaShell, highlight <code>LinuxOnVita.vpk</code> and press <strong>CROSS (✕)</strong> to install. Accept the extended system permissions prompt.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h3 class="step-title">1-Click Setup &amp; Boot</h3>
+            <p class="step-text">
+              Launch <strong>LinuxOnVita</strong> from the LiveArea. Select your Sony Memory Card partition (e.g., <code>xmc0:</code> or <code>ux0:</code>) and press <strong>CROSS (✕)</strong> to boot into Linux!
+            </p>
+          </div>
+        </div>
+
+        <!-- Updating Notice -->
+        <div style="text-align: center; margin-top: 10px;">
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            <strong>Updating an existing install?</strong> In the LinuxOnVita VPK menu, press <strong>SQUARE (□)</strong> to reinstall and update boot files on your memory card without overwriting your SD2Vita user data.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alpine Linux Ecosystem Showcase -->
+    <section id="alpine" class="alpine-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Software Ecosystem</span>
+          <h2 class="section-title">Thousands of Packages with Alpine Linux</h2>
+          <p class="section-desc">
+            With <code>alpine-chroot</code>, your PS Vita has access to standard ARMv7 packages via the lightweight <code>apk</code> package manager.
+          </p>
+        </div>
+
+        <div class="ecosystem-container">
+          <div class="ecosystem-cards-grid">
+            <div class="eco-card">
+              <h3 class="eco-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                Python Web Services
+              </h3>
+              <p class="eco-desc">Spin up microservices, local REST APIs, and HTTP file servers accessible across your local Wi-Fi.</p>
+              <code class="eco-code">apk add python3 &amp;&amp; python3 -m http.server 8080</code>
+            </div>
+
+            <div class="eco-card">
+              <h3 class="eco-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                Native C/C++ Development
+              </h3>
+              <p class="eco-desc">Compile native programs directly on the 4-core Cortex-A9 CPU with GCC, Clang, and Make.</p>
+              <code class="eco-code">apk add gcc g++ make musl-dev git</code>
+            </div>
+
+            <div class="eco-card">
+              <h3 class="eco-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                Terminal Productivity
+              </h3>
+              <p class="eco-desc">Work comfortably with modern text editors and multi-window terminal multiplexers.</p>
+              <code class="eco-code">apk add neovim tmux htop curl</code>
+            </div>
+
+            <div class="eco-card">
+              <h3 class="eco-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                Remote SSH Terminal
+              </h3>
+              <p class="eco-desc">SSH directly into your PS Vita from your MacBook, PC, or iPad using mDNS zero-config.</p>
+              <code class="eco-code">ssh root@vita.local</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Frequently Asked Questions (FAQ) -->
+    <section id="faq" class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Questions &amp; Answers</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-desc">
+            Everything you need to know about safety, compatibility, memory cards, and usage.
+          </p>
+        </div>
+
+        <div class="faq-accordion">
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>Will installing LinuxOnVita delete my existing PS Vita games or firmware?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <strong>Absolutely not.</strong> LinuxOnVita is completely non-destructive. It installs as a regular homebrew application via VitaShell (<code>LinuxOnVita.vpk</code>). Your Sony official firmware, HENkaku/Ensō jailbreak, PS Vita games, save files, and plugins are completely untouched. Whenever you reboot the console, it returns straight to your standard LiveArea home screen.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>Why is an official Sony Memory Card strictly required?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-content">
+              The low-level baremetal bootloader interfaces directly with Sony's proprietary memory card hardware (MSIF). Because the baremetal loader executes before the Linux kernel's storage subsystem is initialized, it can only read boot binaries (<code>zImage</code>, device tree blobs) from a physical Sony card. Once Linux boots, SD2Vita adapters (<code>/mnt/ux0</code>) and internal eMMC partitions (<code>/mnt/ur0</code>) are fully active.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>I have an SD2Vita adapter. Which partition do I choose in the installer?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-content">
+              On consoles using SD2Vita, the SD adapter is mounted as <code>ux0:</code>, and your official Sony Memory Card is typically remapped to <code>xmc0:</code> or <code>uma0:</code>. The LinuxOnVita VPK installer automatically scans your mounted partitions and highlights your Sony card. Simply select the Sony card partition and press <strong>CROSS (✕)</strong> to install the boot files.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>How do I connect to Wi-Fi on the PS Vita in Linux?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-content">
+              Run the built-in <code>vita-wifi</code> utility. It scans nearby wireless networks and displays an interactive ASCII table of SSIDs with signal strength bars. Type the number of your network and enter your WPA2 password. Your credentials are automatically saved to <code>/mnt/ux0/linux/wifi.conf</code> so your Vita reconnects automatically on every subsequent boot.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger" aria-expanded="false">
+              <span>How do I reboot or power down back to the PS Vita LiveArea?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-content">
+              You can simply type <code>reboot</code> or <code>poweroff</code> in the terminal shell. Alternatively, hold the physical PS Vita power button for 5 seconds to cleanly shut down. Upon starting up, your Vita will boot straight into the normal PlayStation LiveArea.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community, Support & GitHub Star Banner -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-banner">
+          <h2 class="cta-banner-title">Join the LinuxOnVita Community</h2>
+          <p class="cta-banner-desc">
+            Have questions, need troubleshooting help, or want to share photos of Linux running on your Vita? Join our Discord server and support continued open-source development!
+          </p>
+          <div class="cta-button-group">
+            <a href="https://discord.gg/BrzdmHu8Am" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-primary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+              <span>Join Discord Server</span>
+            </a>
+            <a href="https://github.com/devwithzachary/LinuxOnVita" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-outline">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+              <span>Star on GitHub</span>
+            </a>
+            <a href="https://www.patreon.com/DevWithZachary" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-outline" style="border-color: rgba(249, 104, 84, 0.4); color: #f96854;">
+              <span>Patreon</span>
+            </a>
+            <a href="https://buymeacoffee.com/linuxonandroid" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-outline" style="border-color: rgba(255, 221, 0, 0.4); color: #ffdd00;">
+              <span>Buy Me a Coffee</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <img src="assets/images/icon0.png" alt="LinuxOnVita Logo" width="32" height="32" style="border-radius: 6px;">
+            <h3>LinuxOnVita</h3>
+          </div>
+          <p>
+            An open-source distribution bringing modern Linux 6.12 to hacked Sony PlayStation Vita consoles. Standalone handheld experience with touch typing and physical controls.
+          </p>
+          <div style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 0.8rem;">
+            Maintained by <a href="https://github.com/devwithzachary" target="_blank" rel="noopener noreferrer" style="color: #fff; text-decoration: underline;">Zachary Powell (@devwithzachary)</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Project Links</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/devwithzachary/LinuxOnVita" target="_blank" rel="noopener noreferrer">Main GitHub Repository</a></li>
+            <li><a href="https://github.com/devwithzachary/LinuxOnVita/releases" target="_blank" rel="noopener noreferrer">Release Downloads (.VPK)</a></li>
+            <li><a href="https://github.com/devwithzachary/LinuxOnVita/blob/main/USER_GUIDE.md" target="_blank" rel="noopener noreferrer">Complete User Guide</a></li>
+            <li><a href="https://github.com/devwithzachary/LinuxOnVita/issues" target="_blank" rel="noopener noreferrer">Bug Tracker &amp; Issues</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#features">Core Features</a></li>
+            <li><a href="#showcase">Console Screenshots</a></li>
+            <li><a href="#hardware">Hardware Support</a></li>
+            <li><a href="#installation">Installation Steps</a></li>
+            <li><a href="#faq">Frequently Asked Questions</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Upstream Credits</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/incognitojam" target="_blank" rel="noopener noreferrer">incognitojam (Kernel &amp; Wi-Fi)</a></li>
+            <li><a href="https://github.com/xerpi" target="_blank" rel="noopener noreferrer">xerpi (Original Pioneer)</a></li>
+            <li><a href="https://github.com/DvaMishkiLapa" target="_blank" rel="noopener noreferrer">DvaMishkiLapa (VPK Loader)</a></li>
+            <li><a href="https://vitasdk.org/" target="_blank" rel="noopener noreferrer">VitaSDK Community</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 LinuxOnVita Project. Licensed under GNU General Public License v3.0 (GPL-3.0).</p>
+        <p class="footer-disclaimer">
+          PlayStation and PlayStation Vita are registered trademarks of Sony Interactive Entertainment Inc. LinuxOnVita is an independent open-source project and is not affiliated with, endorsed by, or sponsored by Sony.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal for Screenshots -->
+  <div class="lightbox-modal" id="lightbox-modal" role="dialog" aria-modal="true" aria-label="Fullscreen Screenshot Preview">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close Preview">&times;</button>
+      <img src="assets/images/screenshot.png" alt="Enlarged screenshot" id="lightbox-img" class="lightbox-img">
+    </div>
+  </div>
+
+  <!-- Client JavaScript -->
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
