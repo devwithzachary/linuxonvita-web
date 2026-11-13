@@ -179,9 +179,8 @@
         </h1>
 
         <p class="hero-subtitle">
-          Experience native modern Linux 6.12 on your PS Vita without serial cables or tethered PCs.
-          Featuring virtual touch typing, physical gamepad navigation, automated on-device Wi-Fi, 
-          compressed ZRAM swap, and full Alpine Linux package management.
+          Experience native modern Linux 6.12 on your PS Vita without serial cables, PC tethering, or proprietary Sony memory cards.
+          Featuring a built-in Web Management Portal (<code>vita-webui</code>), Bluetooth peripheral support, unified <code>vita-config</code> TUI, native C + X11 desktop GUIs, and full Alpine Linux package management.
         </p>
 
         <div class="hero-cta-group">
@@ -431,6 +430,66 @@
               <button class="btn btn-sm copy-btn" data-copy="vita-brightness set 80" aria-label="Copy Command" data-umami-event="Copy Command" data-umami-event-command="vita-brightness set 80">Copy</button>
             </div>
           </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </div>
+              <span class="feature-tag">vita-webui</span>
+            </div>
+            <h3 class="feature-title">Web Management Portal &amp; File Transfer</h3>
+            <p class="feature-desc">
+              Lightweight native C HTTP server on port <code>8080</code> (<code>http://vita.local:8080</code>). Upload and download files wirelessly with safe read-only storage elevation, monitor live CPU/RAM telemetry, and run shell commands from any browser.
+            </p>
+            <div class="feature-command">
+              <code>vita-webui status</code>
+              <button class="btn btn-sm copy-btn" data-copy="vita-webui status" aria-label="Copy Command" data-umami-event="Copy Command" data-umami-event-command="vita-webui status">Copy</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"></polyline>
+                </svg>
+              </div>
+              <span class="feature-tag">vita-bluetooth</span>
+            </div>
+            <h3 class="feature-title">Bluetooth Peripherals &amp; Audio</h3>
+            <p class="feature-desc">
+              Marvell 88W8787 SDIO Bluetooth stack with BlueZ 5 (<code>S40bluetoothd</code>). Scan, pair, and trust wireless keyboards, mice, gamepads, and Bluetooth audio devices directly from the handheld TUI or desktop.
+            </p>
+            <div class="feature-command">
+              <code>vita-bluetooth</code>
+              <button class="btn btn-sm copy-btn" data-copy="vita-bluetooth" aria-label="Copy Command" data-umami-event="Copy Command" data-umami-event-command="vita-bluetooth">Copy</button>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+              </div>
+              <span class="feature-tag">vita-config</span>
+            </div>
+            <h3 class="feature-title">Handheld Control Center &amp; Native GUIs</h3>
+            <p class="feature-desc">
+              Unified <code>raspi-config</code>-style TUI for Wi-Fi, Bluetooth, model-aware display controls, 111-444 MHz CPU profiles, LEDs, and ZRAM, paired with instant-render static C + X11 desktop GUIs.
+            </p>
+            <div class="feature-command">
+              <code>vita-config</code>
+              <button class="btn btn-sm copy-btn" data-copy="vita-config" aria-label="Copy Command" data-umami-event="Copy Command" data-umami-event-command="vita-config">Copy</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -458,9 +517,9 @@
               </thead>
               <tbody>
                 <tr class="matrix-row" data-category="system">
-                  <td><strong>CPU (SMP Multiprocessing)</strong></td>
+                  <td><strong>CPU (SMP &amp; Frequency Scaling)</strong></td>
                   <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
-                  <td>Quad-core ARM Cortex-A9 MPCore with active Symmetric Multi-Processing (SMP) across all 4 cores.</td>
+                  <td>Quad-core ARM Cortex-A9 SMP with dynamic <code>vita-cpufreq</code> scaling (111-444 MHz) via <code>vita-cpu</code>.</td>
                 </tr>
                 <tr class="matrix-row" data-category="display">
                   <td><strong>Display (OLED / LCD Framebuffer)</strong></td>
@@ -475,7 +534,12 @@
                 <tr class="matrix-row" data-category="network">
                   <td><strong>Wi-Fi (Marvell SD8787)</strong></td>
                   <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
-                  <td><code>mwifiex_sdio</code> on SDIF2 with custom Ernie power sequencing and on-device <code>vita-wifi</code> manager.</td>
+                  <td><code>mwifiex_sdio</code> on SDIF2 with custom Ernie power sequencing, <code>vita-wifi</code> CLI/GUI, taskbar widget, and <code>vita-wifi-daemon</code>.</td>
+                </tr>
+                <tr class="matrix-row" data-category="network">
+                  <td><strong>Bluetooth (Marvell SD8787)</strong></td>
+                  <td><span class="status-badge working"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Working</span></td>
+                  <td><code>btmrvl_sdio</code> with BlueZ 5 (<code>S40bluetoothd</code>) and <code>vita-bluetooth</code> for classic keyboards, mice, gamepads, and audio.</td>
                 </tr>
                 <tr class="matrix-row" data-category="input">
                   <td><strong>Touchscreen Digitizer</strong></td>
@@ -540,22 +604,17 @@
           </p>
         </div>
 
-        <!-- Sony Memory Card Requirement Warning -->
-        <div class="notice-box warning-card">
+        <!-- Sony Memory Card Independence Notice -->
+        <div class="notice-box">
           <div class="notice-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-              <line x1="12" y1="9" x2="12" y2="13"></line>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
           </div>
           <div class="notice-content">
-            <h4>Strict Requirement: Official Sony Memory Card Required</h4>
+            <h4>No Sony Memory Card Required: SD2Vita &amp; Internal Storage Ready</h4>
             <p>
-              An official physical <strong>Sony PS Vita Memory Card</strong> is strictly required on <strong>all hardware models</strong> (PS Vita 1000 OLED, 2000 Slim, and PlayStation TV).
-              The low-level baremetal bootloader operates before Linux storage drivers are loaded and interfaces directly with Sony's proprietary Memory Stick interface (MSIF). It <strong>cannot</strong> boot from internal eMMC storage (<code>imc0:</code>) or SD2Vita adapters.
-              <br><br>
-              <em>SD2Vita Users:</em> Your official Sony card will appear as <code>xmc0:</code> or <code>uma0:</code> in the installer. Boot files are installed to the Sony card, while your high-capacity microSD card remains fully accessible in Linux at <code>/mnt/ux0</code>.
+              LinuxOnVita uses in-memory DRAM kernel pre-staging inside <code>baremetal-loader.skprx</code>, allowing you to boot directly from <strong>SD2Vita (<code>ux0:</code>)</strong> or <strong>internal eMMC storage (<code>ur0:</code>)</strong> on PS Vita 1000, 2000, and PS TV without needing an official Sony memory card.
             </p>
           </div>
         </div>
@@ -606,7 +665,7 @@
             <div class="step-number">4</div>
             <h3 class="step-title">1-Click Setup &amp; Boot</h3>
             <p class="step-text">
-              Launch <strong>LinuxOnVita</strong> from the LiveArea. Select your Sony Memory Card partition (e.g., <code>xmc0:</code> or <code>ux0:</code>) and press <strong>CROSS (✕)</strong> to boot into Linux!
+              Launch <strong>LinuxOnVita</strong> from the LiveArea. Select your storage partition (<code>ux0:</code> SD2Vita or <code>ur0:</code> internal) and press <strong>CROSS (✕)</strong> to boot into Linux!
             </p>
           </div>
         </div>
@@ -614,7 +673,7 @@
         <!-- Updating Notice -->
         <div style="text-align: center; margin-top: 10px;">
           <p style="color: var(--text-secondary); font-size: 0.9rem;">
-            <strong>Updating an existing install?</strong> In the LinuxOnVita VPK menu, press <strong>SQUARE (□)</strong> to reinstall and update boot files on your memory card without overwriting your SD2Vita user data.
+            <strong>Updating an existing install?</strong> Press <strong>L-TRIGGER</strong> in the LinuxOnVita app to check GitHub for new VPK releases automatically, or press <strong>TRIANGLE (△)</strong> / <strong>SQUARE (□)</strong> to update your <code>ux0:/linux/</code> boot files.
           </p>
         </div>
       </div>
